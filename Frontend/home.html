@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mental Health Tracker | Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <h2>🧘 Mental Health Tracker</h2>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <div class="dashboard">
+    <h1>Welcome, <span id="userName">User</span> 👋</h1>
+    <p>Here’s a quick overview of your wellness journey.</p>
+
+   <div class="card">
+  <h3>Mood Tracker</h3>
+  <p>Track your daily mood patterns.</p>
+  <button class="card-btn" id="viewMood">View</button>
+</div>
+
+      <div class="card">
+        <h3>Triggers</h3>
+        <p>Identify what affects your mental state.</p>
+        <button class="card-btn" onclick="window.location.href='triggers.html'">View</button>
+      </div>
+      <div class="card">
+        <h3>Medications</h3>
+        <p>Check your schedule and logs.</p>
+        <button class="card-btn">View</button>
+      </div>
+      <div class="card">
+        <h3>Appointments</h3>
+        <p>See your upcoming sessions.</p>
+        <button class="card-btn" onclick="window.location.href='appointments.html'">View</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="home.js"></script>
+</body>
+</html>

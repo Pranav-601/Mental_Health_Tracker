@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .appointment-item {
+      background: #f9f9f9;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border-left: 4px solid #4CAF50;
+      position: relative;
+    }
+    .appointment-item.past {
+      border-left-color: #ccc;
+      opacity: 0.7;
+    }
+    .delete-btn {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      float: right;
+    }
+    .delete-btn:hover {
+      background: #da190b;
+    }
+    input[type="date"], input[type="time"], input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h2>📅 Appointment Tracker</h2>
+    <button onclick="window.location.href='home.html'">🏠 Back to Dashboard</button>
+  </div>
+
+  <div class="container">
+    <h2>Schedule a New Appointment</h2>
+    <form id="appointmentForm">
+      <input type="date" id="appointmentDate" required placeholder="Appointment Date" />
+      <input type="time" id="appointmentTime" required placeholder="Appointment Time" />
+      <input type="text" id="doctorName" required placeholder="Doctor's Name" />
+      <textarea id="appointmentNotes" placeholder="Additional notes (optional)..."></textarea>
+      <button type="submit">Save Appointment</button>
+    </form>
+
+    <h3>Your Upcoming Appointments</h3>
+    <div id="appointmentList"></div>
+  </div>
+
+  <script src="appointments.js"></script>
+</body>
+</html>
+

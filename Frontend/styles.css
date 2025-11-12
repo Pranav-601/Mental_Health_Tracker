@@ -1,0 +1,143 @@
+body {
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  padding: 40px;
+  background: #f4f6f9;
+  color: #333;
+}
+
+h1 {
+  color: #4b6cb7;
+  margin-bottom: 20px;
+}
+
+form {
+  margin: 0 auto 30px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+}
+
+input, textarea, button {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+button {
+  background-color: #4b6cb7;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #395591;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: white;
+  padding: 10px;
+  margin: 5px auto;
+  width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+    /* 🔒 Login/Register Page Fixes */
+.login-page {
+  max-width: 400px;
+  margin: 5rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 0.7rem;
+  background: #eef2ff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.tabs button.active {
+  background: #4f46e5;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+#message {
+  color: #4f46e5;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #5c6bc0;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 0 0 10px 10px;
+}
+
+.dashboard {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem;
+}
+
+.card {
+  background: #f7f7ff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #5c6bc0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.card-btn:hover {
+  background-color: #3f4c8b;
+}

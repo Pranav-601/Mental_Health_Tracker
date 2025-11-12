@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mental Health Tracker | Register</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 Create Account</h1>
+    <form id="registerForm">
+      <input type="text" id="username" placeholder="Enter username" required />
+      <input type="password" id="password" placeholder="Enter password" required />
+      <button type="submit">Register</button>
+    </form>
+    <p id="message"></p>
+    <p><a href="index.html">Already have an account? Login</a></p>
+  </div>
+
+  <script>
+    const backendURL = "http://localhost:5000/api/auth";
+
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+
+      try {
+        const res = await fetch(`${backendURL}/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await res.json();
+        message.textContent = data.message;
+
+        if (res.ok) {
+          alert("✅ Registered successfully! Redirecting to login...");
+          window.location.href = "index.html";
+        }
+      } catch (err) {
+        console.error(err);
+        message.textContent = "❌ Error connecting to server.";
+      }
+    });
+  </script>
+</body>
+</html>

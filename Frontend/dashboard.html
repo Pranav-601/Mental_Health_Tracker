@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+</head>
+<body>
+  <h1>Welcome to your dashboard!</h1>
+  <button id="logoutBtn">Logout</button>
+
+  <script>
+    // Check login
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please log in first!");
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("token");
+      alert("Logged out successfully!");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
