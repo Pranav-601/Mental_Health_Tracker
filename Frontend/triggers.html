@@ -1,38 +1,373 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trigger Tracker</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindTrack - Mental Health Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c63ff;
+            --secondary: #f5f5f7;
+            --text: #333333;
+            --light-text: #666666;
+            --border: #e0e0e0;
+            --danger: #ff6b6b;
+            --success: #4caf50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a52d8;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .emotion-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .emotion-option {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: var(--secondary);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .emotion-option:hover {
+            background-color: #e0e0e0;
+        }
+
+        .emotion-option.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .history-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: var(--light-text);
+            margin-bottom: 5px;
+        }
+
+        .history-emotions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .history-emotion {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background-color: var(--secondary);
+        }
+
+        .history-trigger {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .history-note {
+            color: var(--light-text);
+            font-size: 14px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            flex: 30%;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+    </style>
 </head>
 <body>
-  <div class="navbar">
-    <h2>⚠️ Trigger Tracker</h2>
-    <button onclick="window.location.href='home.html'">🏠 Back to Dashboard</button>
-  </div>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>MindTrack</h1>
+            </div>
+            <div class="user-profile">JP</div>
+        </header>
 
-  <div class="container">
-    <h2>Record an Emotional Trigger</h2>
-    <select id="triggerSelect">
-      <option value="Sadness">😢 Sadness</option>
-      <option value="Guilt">😔 Guilt</option>
-      <option value="Sudden Happiness">😄 Sudden Happiness</option>
-      <option value="Panic Attack">😱 Panic Attack</option>
-      <option value="Anxiety">😰 Anxiety</option>
-      <option value="Anger">😡 Anger</option>
-      <option value="Overwhelm">😵 Overwhelm</option>
-      <option value="Fear">😨 Fear</option>
-    </select>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Record Your Trigger</div>
+            </div>
+            <form id="triggerForm">
+                <div class="form-group">
+                    <label for="trigger">What triggered you?</label>
+                    <input type="text" id="trigger" placeholder="Describe what triggered your emotions..." required>
+                </div>
 
-    <textarea id="triggerDescription" placeholder="Describe what triggered this reaction..."></textarea>
-    <button id="saveTrigger">Save Trigger</button>
+                <div class="form-group">
+                    <label>When did this happen?</label>
+                    <input type="datetime-local" id="triggerTime" required>
+                </div>
 
-    <h3>Your Past Triggers</h3>
-    <ul id="triggerList"></ul>
-  </div>
+                <div class="form-group">
+                    <label>How did this make you feel?</label>
+                    <div class="emotion-options">
+                        <div class="emotion-option">Anxious</div>
+                        <div class="emotion-option">Stressed</div>
+                        <div class="emotion-option">Angry</div>
+                        <div class="emotion-option">Sad</div>
+                        <div class="emotion-option">Overwhelmed</div>
+                        <div class="emotion-option">Frustrated</div>
+                        <div class="emotion-option">Lonely</div>
+                        <div class="emotion-option">Tired</div>
+                    </div>
+                </div>
 
-  <script src="triggers.js"></script>
+                <div class="form-group">
+                    <label for="note">Additional Notes</label>
+                    <textarea id="note" placeholder="Add any additional details about what happened and how you responded..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Entry</button>
+            </form>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Entries this week</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Most common trigger</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">Anxious</div>
+                <div class="stat-label">Most frequent emotion</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Entries</div>
+            </div>
+            <div class="history-list">
+                <div class="history-item">
+                    <div class="history-date">Today, 3:45 PM</div>
+                    <div class="history-emotions">
+                        <div class="history-emotion">Anxious</div>
+                        <div class="history-emotion">Stressed</div>
+                    </div>
+                    <div class="history-trigger">Work deadline approaching</div>
+                    <div class="history-note">Felt my heart racing when I realized how much work I have left to do before Friday.</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-date">Yesterday, 7:30 PM</div>
+                    <div class="history-emotions">
+                        <div class="history-emotion">Lonely</div>
+                    </div>
+                    <div class="history-trigger">Friends cancelled plans</div>
+                    <div class="history-note">Was looking forward to seeing people but they all cancelled last minute.</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-date">Yesterday, 10:15 AM</div>
+                    <div class="history-emotions">
+                        <div class="history-emotion">Frustrated</div>
+                        <div class="history-emotion">Angry</div>
+                    </div>
+                    <div class="history-trigger">Argument with partner</div>
+                    <div class="history-note">We disagreed about household responsibilities and it escalated quickly.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Emotion selection
+            const emotionOptions = document.querySelectorAll('.emotion-option');
+            emotionOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+
+            // Form submission
+            const triggerForm = document.getElementById('triggerForm');
+            triggerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const trigger = document.getElementById('trigger').value;
+                const triggerTime = document.getElementById('triggerTime').value;
+                const note = document.getElementById('note').value;
+                
+                // Get selected emotions
+                const selectedEmotions = [];
+                document.querySelectorAll('.emotion-option.selected').forEach(emotion => {
+                    selectedEmotions.push(emotion.textContent);
+                });
+                
+                // Here you would typically send this data to a server
+                console.log({
+                    trigger,
+                    triggerTime,
+                    emotions: selectedEmotions,
+                    note
+                });
+                
+                // Show success message (in a real app, you'd want to update the UI properly)
+                alert('Entry saved successfully!');
+                triggerForm.reset();
+                
+                // Remove selected class from all emotions
+                emotionOptions.forEach(option => {
+                    option.classList.remove('selected');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-

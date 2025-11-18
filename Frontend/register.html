@@ -4,18 +4,199 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mental Health Tracker | Register</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 50px 40px;
+      width: 100%;
+      max-width: 420px;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 10px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 35px;
+      line-height: 1.5;
+    }
+
+    #registerForm {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    input {
+      padding: 14px 18px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    input::placeholder {
+      color: #999;
+    }
+
+    button {
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #message {
+      text-align: center;
+      min-height: 20px;
+      font-size: 14px;
+      margin-top: 10px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    #message.success {
+      color: #10b981;
+    }
+
+    #message.error {
+      color: #ef4444;
+    }
+
+    .divider {
+      text-align: center;
+      color: #999;
+      font-size: 13px;
+      margin: 25px 0;
+      position: relative;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: #e0e0e0;
+      z-index: -1;
+    }
+
+    .divider span {
+      background: white;
+      padding: 0 10px;
+    }
+
+    .login-link {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .login-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .login-link a:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 35px 25px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      input, button {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>🧠 Create Account</h1>
+    <p class="subtitle">Join us and start tracking your mental wellness journey</p>
+    
     <form id="registerForm">
-      <input type="text" id="username" placeholder="Enter username" required />
-      <input type="password" id="password" placeholder="Enter password" required />
-      <button type="submit">Register</button>
+      <input type="text" id="username" placeholder="Choose a username" required />
+      <input type="password" id="password" placeholder="Create a password" required />
+      <button type="submit">Create Account</button>
     </form>
+    
     <p id="message"></p>
-    <p><a href="index.html">Already have an account? Login</a></p>
+    
+    <div class="divider"><span>or</span></div>
+    
+    <p class="login-link">Already have an account? <a href="index.html">Login here</a></p>
   </div>
 
   <script>
@@ -39,12 +220,19 @@
         message.textContent = data.message;
 
         if (res.ok) {
+          message.classList.add("success");
+          message.classList.remove("error");
           alert("✅ Registered successfully! Redirecting to login...");
           window.location.href = "index.html";
+        } else {
+          message.classList.add("error");
+          message.classList.remove("success");
         }
       } catch (err) {
         console.error(err);
         message.textContent = "❌ Error connecting to server.";
+        message.classList.add("error");
+        message.classList.remove("success");
       }
     });
   </script>

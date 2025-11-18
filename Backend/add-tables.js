@@ -45,6 +45,37 @@ async function addTables() {
     `);
     console.log("✅ Appointments table created");
 
+    // Create medications table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS medications (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        name VARCHAR(100) NOT NULL,
+        dosage VARCHAR(50),
+        frequency VARCHAR(50),
+        time_of_day VARCHAR(50),
+        start_date DATE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        INDEX idx_user_medication (user_id)
+      )
+    `);
+    console.log("✅ Medications table created");
+
+    // Create medication_log table
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS medication_log (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        medication_id INT NOT NULL,
+        user_id INT NOT NULL,
+        taken_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (medication_id) REFERENCES medications(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        INDEX idx_user_date (user_id, taken_at)
+      )
+    `);
+    console.log("✅ Medication log table created");
+
     // Show all tables
     const [tables] = await connection.query("SHOW TABLES");
     console.log("\n📊 Tables in database:");

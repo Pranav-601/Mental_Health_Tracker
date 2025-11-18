@@ -1,34 +1,540 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mood Tracker</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker - Track Your Mental Health</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Main Card */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #1a202c;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Mood Selection */
+        .mood-section {
+            margin-bottom: 30px;
+        }
+
+        .mood-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .mood-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .mood-option {
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .mood-option:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .mood-option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .mood-emoji {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Notes Section */
+        .notes-section {
+            margin-bottom: 30px;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            color: #2d3748;
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .char-count {
+            font-size: 12px;
+            color: #a0aec0;
+            margin-top: 8px;
+            text-align: right;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 2;
+        }
+
+        .save-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .save-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .clear-btn {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+            flex: 1;
+        }
+
+        .clear-btn:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.success {
+            background: #c6f6d5;
+            color: #22543d;
+            border-left: 4px solid #48bb78;
+        }
+
+        .status-message.error {
+            background: #fed7d7;
+            color: #742a2a;
+            border-left: 4px solid #f56565;
+        }
+
+        /* History Section */
+        .history-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease-out;
+            animation-delay: 0.1s;
+            animation-fill-mode: both;
+            height: fit-content;
+        }
+
+        .history-card h2 {
+            font-size: 24px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .history-list {
+            list-style: none;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        .history-item {
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            background: #edf2f7;
+            transform: translateX(4px);
+        }
+
+        .history-mood {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .history-time {
+            font-size: 12px;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+
+        .history-note {
+            font-size: 13px;
+            color: #4a5568;
+            line-height: 1.4;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #a0aec0;
+        }
+
+        .empty-state-emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
-  <div class="navbar">
-    <h2>🧘 Mood Tracker</h2>
-    <button onclick="window.location.href='home.html'">🏠 Back to Dashboard</button>
-  </div>
+    <div class="container">
+        <!-- Main mood recording form -->
+        <div class="card">
+            <h1>How are you feeling?</h1>
+            <p class="subtitle">Track your mood and mental health journey</p>
 
-  <div class="container">
-    <h2>How are you feeling today?</h2>
-    <select id="moodSelect">
-      <option value="Happy">😊 Happy</option>
-      <option value="Sad">😢 Sad</option>
-      <option value="Anxious">😰 Anxious</option>
-      <option value="Calm">😌 Calm</option>
-      <option value="Angry">😡 Angry</option>
-    </select>
+            <div class="status-message" id="statusMessage"></div>
 
-    <textarea id="moodNote" placeholder="Write a short note..."></textarea>
-    <button id="saveMood">Save Mood</button>
+            <!-- Mood Selection -->
+            <div class="mood-section">
+                <label class="mood-label">Select Your Mood</label>
+                <div class="mood-grid">
+                    <button class="mood-option" data-mood="happy" data-emoji="😊">
+                        <span class="mood-emoji">😊</span>
+                        Happy
+                    </button>
+                    <button class="mood-option" data-mood="sad" data-emoji="😢">
+                        <span class="mood-emoji">😢</span>
+                        Sad
+                    </button>
+                    <button class="mood-option" data-mood="anxious" data-emoji="😰">
+                        <span class="mood-emoji">😰</span>
+                        Anxious
+                    </button>
+                    <button class="mood-option" data-mood="calm" data-emoji="😌">
+                        <span class="mood-emoji">😌</span>
+                        Calm
+                    </button>
+                    <button class="mood-option" data-mood="excited" data-emoji="🤩">
+                        <span class="mood-emoji">🤩</span>
+                        Excited
+                    </button>
+                    <button class="mood-option" data-mood="neutral" data-emoji="😐">
+                        <span class="mood-emoji">😐</span>
+                        Neutral
+                    </button>
+                </div>
+            </div>
 
-    <h3>Your Past Moods</h3>
-    <ul id="moodList"></ul>
-  </div>
+            <!-- Notes Section -->
+            <div class="notes-section">
+                <label class="mood-label">Add Notes (Optional)</label>
+                <textarea class="notes-textarea" id="moodNote" placeholder="What's on your mind? How was your day? What triggered this mood?"></textarea>
+                <div class="char-count"><span id="charCount">0</span>/500</div>
+            </div>
 
-  <script src="mood.js"></script>
+            <!-- Buttons -->
+            <div class="button-group">
+                <button class="save-btn" id="saveMood" disabled>Save Mood</button>
+                <button class="clear-btn" id="clearBtn">Clear</button>
+            </div>
+        </div>
+
+        <!-- Mood history sidebar -->
+        <div class="history-card">
+            <h2>Mood History</h2>
+            <div id="moodList" class="history-list">
+                <div class="loading">Loading your mood history...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const moodOptions = document.querySelectorAll('.mood-option');
+        const saveMoodBtn = document.getElementById('saveMood');
+        const clearBtn = document.getElementById('clearBtn');
+        const moodNote = document.getElementById('moodNote');
+        const moodList = document.getElementById('moodList');
+        const statusMessage = document.getElementById('statusMessage');
+        const charCount = document.getElementById('charCount');
+
+        let selectedMood = null;
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please log in first!');
+            window.location.href = 'index.html';
+        }
+
+        moodOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                moodOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedMood = option.dataset.mood;
+                updateSaveButtonState();
+            });
+        });
+
+        moodNote.addEventListener('input', () => {
+            charCount.textContent = moodNote.value.length;
+            updateSaveButtonState();
+        });
+
+        clearBtn.addEventListener('click', () => {
+            selectedMood = null;
+            moodNote.value = '';
+            charCount.textContent = '0';
+            moodOptions.forEach(opt => opt.classList.remove('selected'));
+            updateSaveButtonState();
+            hideStatus();
+        });
+
+        function updateSaveButtonState() {
+            saveMoodBtn.disabled = !selectedMood;
+        }
+
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message show ${type}`;
+            setTimeout(() => hideStatus(), 3000);
+        }
+
+        function hideStatus() {
+            statusMessage.classList.remove('show');
+        }
+
+        async function loadMoods() {
+            try {
+                const res = await fetch('http://localhost:5000/api/moods', {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                const data = await res.json();
+
+                moodList.innerHTML = '';
+                
+                if (data.length === 0) {
+                    moodList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-emoji">📝</div>
+                            <p>No moods recorded yet. Start tracking your feelings!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                data.forEach((entry) => {
+                    const date = new Date(entry.entry_date);
+                    const timeString = date.toLocaleDateString() + ' at ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    const li = document.createElement('div');
+                    li.className = 'history-item';
+                    li.innerHTML = `
+                        <div class="history-mood">${entry.mood.charAt(0).toUpperCase() + entry.mood.slice(1)}</div>
+                        <div class="history-time">${timeString}</div>
+                        ${entry.note ? `<div class="history-note">${entry.note}</div>` : ''}
+                    `;
+                    moodList.appendChild(li);
+                });
+            } catch (err) {
+                console.error('[v0] Error loading moods:', err);
+                moodList.innerHTML = '<div class="empty-state"><p>Error loading mood history</p></div>';
+            }
+        }
+
+        saveMoodBtn.addEventListener('click', async () => {
+            if (!selectedMood) return;
+
+            const note = moodNote.value.trim();
+
+            try {
+                saveMoodBtn.disabled = true;
+                const res = await fetch('http://localhost:5000/api/moods', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ mood: selectedMood, note }),
+                });
+
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showStatus(data.message || 'Mood saved successfully!', 'success');
+                    selectedMood = null;
+                    moodNote.value = '';
+                    charCount.textContent = '0';
+                    moodOptions.forEach(opt => opt.classList.remove('selected'));
+                    updateSaveButtonState();
+                    loadMoods();
+                } else {
+                    showStatus(data.message || 'Error saving mood', 'error');
+                }
+            } catch (err) {
+                console.error('[v0] Error saving mood:', err);
+                showStatus('Error saving mood. Try again.', 'error');
+            } finally {
+                saveMoodBtn.disabled = !selectedMood;
+            }
+        });
+
+        loadMoods();
+    </script>
 </body>
 </html>

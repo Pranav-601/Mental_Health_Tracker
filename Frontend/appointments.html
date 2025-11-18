@@ -1,66 +1,594 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appointment Tracker</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .appointment-item {
-      background: #f9f9f9;
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border-left: 4px solid #4CAF50;
-      position: relative;
-    }
-    .appointment-item.past {
-      border-left-color: #ccc;
-      opacity: 0.7;
-    }
-    .delete-btn {
-      background: #f44336;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      float: right;
-    }
-    .delete-btn:hover {
-      background: #da190b;
-    }
-    input[type="date"], input[type="time"], input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Book Appointment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2d9cdb;
+            --primary-dark: #1a73e8;
+            --secondary: #f5f7fa;
+            --text: #333333;
+            --light-text: #666666;
+            --border: #e0e0e0;
+            --success: #4caf50;
+            --warning: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-option {
+            margin-left: 20px;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: color 0.3s;
+        }
+
+        .user-option:hover {
+            color: var(--primary);
+        }
+
+        .user-option i {
+            margin-right: 5px;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .doctor-list {
+            list-style: none;
+        }
+
+        .doctor-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .doctor-item:hover {
+            background-color: var(--secondary);
+        }
+
+        .doctor-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .doctor-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .doctor-info h4 {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .doctor-info p {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+
+        .doctor-item.active .doctor-info p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .booking-section {
+            flex: 1;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .booking-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .current-date {
+            color: var(--light-text);
+            font-size: 14px;
+        }
+
+        .doctor-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .doctor-profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+
+        .doctor-details h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .doctor-specialty {
+            color: var(--primary);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .doctor-rating {
+            color: #ffc107;
+            font-size: 14px;
+        }
+
+        .booking-form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .date-picker {
+            display: flex;
+            gap: 15px;
+        }
+
+        .date-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .date-option:hover {
+            border-color: var(--primary);
+        }
+
+        .date-option.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .date-day {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .date-number {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+        .date-month {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+
+        .date-option.active .date-month {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .time-slot {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .time-slot:hover {
+            border-color: var(--primary);
+        }
+
+        .time-slot.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .reminder-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .reminder-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reminder-option:hover {
+            border-color: var(--primary);
+        }
+
+        .reminder-option.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .reminder-option i {
+            margin-right: 8px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .confirmation-message {
+            text-align: center;
+            padding: 40px 0;
+            display: none;
+        }
+
+        .confirmation-message i {
+            font-size: 50px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .confirmation-message h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .confirmation-message p {
+            color: var(--light-text);
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-  <div class="navbar">
-    <h2>📅 Appointment Tracker</h2>
-    <button onclick="window.location.href='home.html'">🏠 Back to Dashboard</button>
-  </div>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="https://i.imgur.com/IqyA8zu.png" alt="MediCare logo with a medical cross symbol">
+                <h1>MediCare</h1>
+            </div>
+            <div class="user-actions">
+                <div class="user-option">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </div>
+                <div class="user-option">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </div>
+                <div class="user-option">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </header>
 
-  <div class="container">
-    <h2>Schedule a New Appointment</h2>
-    <form id="appointmentForm">
-      <input type="date" id="appointmentDate" required placeholder="Appointment Date" />
-      <input type="time" id="appointmentTime" required placeholder="Appointment Time" />
-      <input type="text" id="doctorName" required placeholder="Doctor's Name" />
-      <textarea id="appointmentNotes" placeholder="Additional notes (optional)..."></textarea>
-      <button type="submit">Save Appointment</button>
-    </form>
+        <div class="main-content">
+            <div class="sidebar">
+                <h3 class="sidebar-title">Available Doctors</h3>
+                <ul class="doctor-list">
+                    <li class="doctor-item active">
+                        <img src="https://i.imgur.com/IqyA8zu.png" alt="Portrait of Dr. Pranav Bomble" class="doctor-avatar">
+                        <div class="doctor-info">
+                            <h4>Dr. Pranav Bomble</h4>
+                            <p>Cardiologist</p>
+                        </div>
+                    </li>
+                    <li class="doctor-item">
+                        <img src="https://i.imgur.com/P6Ii77f.png" alt="Portrait of Dr. Pratham Barekal" class="doctor-avatar">
+                        <div class="doctor-info">
+                            <h4>Dr. Pratham Barekal</h4>
+                            <p>Neurologist</p>
+                        </div>
+                    </li>
+                    <li class="doctor-item">
+                        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80" alt="Portrait of Dr. Emily Wilson" class="doctor-avatar">
+                        <div class="doctor-info">
+                            <h4>Dr.Mrunmai </h4>
+                            <p>Not A Doctor</p>
+                        </div>
+                    </li>
+                    <li class="doctor-item">
+                        <img src="https://i.imgur.com/TOnqb5i.png" alt="Portrait of Dr. Ahmad Azmi" class="doctor-avatar">
+                        <div class="doctor-info">
+                            <h4>Dr. Ahmad Azmi</h4>
+                            <p>Dermatologist</p>
+                        </div>
+                    </li>
+                    <li class="doctor-item">
+                        <img src="https://images.unsplash.com/photo-1591608971362-f08f2f76a03f?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80" alt="Portrait of Dr. Lisa Patel" class="doctor-avatar">
+                        <div class="doctor-info">
+                            <h4>Dr. Lawand Doctor</h4>
+                            <p>Gynecologist</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
-    <h3>Your Upcoming Appointments</h3>
-    <div id="appointmentList"></div>
-  </div>
+            <div class="booking-section">
+                <div class="booking-header">
+                    <h2 class="booking-title">Book an Appointment</h2>
+                    <div class="current-date">Today: June 15, 2023</div>
+                </div>
 
-  <script src="appointments.js"></script>
+                <div class="doctor-profile">
+                    <img src="https://i.imgur.com/IqyA8zu.png" alt="Portrait of Dr. Pranav Bomble" class="doctor-profile-img">
+                    <div class="doctor-details">
+                        <h3>Dr.Pranav Bomble</h3>
+                        <p class="doctor-specialty">Cardiologist</p>
+                        <p class="doctor-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            4.7 (128 reviews)
+                        </p>
+                    </div>
+                </div>
+
+                <div class="booking-form">
+                    <div class="form-group">
+                        <label class="form-label">Select Date</label>
+                        <div class="date-picker">
+                            <div class="date-option active">
+                                <div class="date-day">Wed</div>
+                                <div class="date-number">15</div>
+                                <div class="date-month">Jun</div>
+                            </div>
+                            <div class="date-option">
+                                <div class="date-day">Thu</div>
+                                <div class="date-number">16</div>
+                                <div class="date-month">Jun</div>
+                            </div>
+                            <div class="date-option">
+                                <div class="date-day">Fri</div>
+                                <div class="date-number">17</div>
+                                <div class="date-month">Jun</div>
+                            </div>
+                            <div class="date-option">
+                                <div class="date-day">Sat</div>
+                                <div class="date-number">18</div>
+                                <div class="date-month">Jun</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Select Time Slot</label>
+                        <div class="time-slots">
+                            <div class="time-slot">9:00 AM</div>
+                            <div class="time-slot">9:30 AM</div>
+                            <div class="time-slot">10:00 AM</div>
+                            <div class="time-slot active">10:30 AM</div>
+                            <div class="time-slot">11:00 AM</div>
+                            <div class="time-slot">11:30 AM</div>
+                            <div class="time-slot">12:00 PM</div>
+                            <div class="time-slot">12:30 PM</div>
+                            <div class="time-slot">1:00 PM</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Appointment Reminder</label>
+                        <div class="reminder-options">
+                            <div class="reminder-option active">
+                                <i class="fas fa-bell"></i>
+                                <span>Email</span>
+                            </div>
+                            <div class="reminder-option">
+                                <i class="fas fa-sms"></i>
+                                <span>SMS</span>
+                            </div>
+                            <div class="reminder-option">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>Push Notification</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes" class="form-label">Additional Notes (Optional)</label>
+                        <textarea id="notes" class="form-control" rows="3" placeholder="Any special requests or information for the doctor"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-block" id="book-appointment">Book Appointment</button>
+
+                    <div class="confirmation-message" id="confirmation">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Appointment Booked Successfully!</h3>
+                        <p>Your appointment with Dr. Pranav Bomble is confirmed for June 15, 2023 at 10:30 AM.</p>
+                        <button class="btn btn-primary">View Appointment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Date selection
+            const dateOptions = document.querySelectorAll('.date-option');
+            dateOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    dateOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Time slot selection
+            const timeSlots = document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => {
+                slot.addEventListener('click', function() {
+                    timeSlots.forEach(s => s.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Reminder option selection
+            const reminderOptions = document.querySelectorAll('.reminder-option');
+            reminderOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    reminderOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Doctor selection
+            const doctorItems = document.querySelectorAll('.doctor-item');
+            doctorItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    doctorItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Book appointment button
+            const bookBtn = document.getElementById('book-appointment');
+            const confirmation = document.getElementById('confirmation');
+            
+            bookBtn.addEventListener('click', function() {
+                this.style.display = 'none';
+                confirmation.style.display = 'block';
+            });
+        });
+    </script>
 </body>
 </html>
-

@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import moodRoutes from "./routes/moods.js";
 import triggerRoutes from "./routes/triggers.js";
 import appointmentRoutes from "./routes/appointments.js";
+import medicationRoutes from "./routes/medications.js";
 
 const app = express();
 const PORT = 5000;
@@ -20,16 +21,15 @@ app.use(bodyParser.json());
 app.use("/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/moods", moodRoutes);
-app.use("/api/mood", moodRoutes);
 app.use("/api/triggers", triggerRoutes);
 app.use("/api/appointments", appointmentRoutes);
-
+app.use("/api/medications", medicationRoutes);
 
 // ===== Serve Frontend =====
 const frontendPath = path.join(__dirname, "../Frontend");
 app.use(express.static(frontendPath));
 
-// ✅ Express 5 fallback route (regex)
+// Fallback route for SPA
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
